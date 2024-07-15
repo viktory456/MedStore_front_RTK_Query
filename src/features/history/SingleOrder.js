@@ -25,11 +25,9 @@ const orderList = orderArray.map(item => {
 })
 
     return (
-        <li key={orderId} className='alignOrder'>
+        <li key={Number(orderId.id)} className='alignOrder'>
             <div className='singleOrder'>{orderList}</div>
             <div>Total price: {totalOrder}</div>
-            
         </li>
-
     )
 }

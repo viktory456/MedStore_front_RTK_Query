@@ -1,4 +1,4 @@
-import { useGetDrugsQuery} from '../api/drugsSlice'
+import { useGetDrugsQuery} from '../api/medsSlice'
 import {useAddToCartMutation, selectAllCart, selectCartById} from '../api/cartSlice'
 import {Buffer} from "buffer" 
 import { useState } from 'react'
@@ -9,18 +9,13 @@ import { useSelector } from "react-redux"
 
 
 const CartItem = ({cartItemId}) => {
-    // const cart = useSelector(selectAllCart)
-    const cartItem = useSelector((state) => selectCartById(state, Number(cartItemId.id)))
 
-    // const { itemInCart } = useGetCartQuery('getCart', {
-    //     selectFromResult: ({ data }) => ({
-    //         itemInCart: data?.entities[cartItemId]
-    //     }),
-    // })
+    const cartItem = useSelector((state) => selectCartById(state, Number(cartItemId.id)))
 
     const [deleteItem] = useDeleteFromCartMutation()
     const [increaseItemQty] = useIncreaseQtyMutation()
     const [decreaseItemQty] = useDecreaseQtyMutation()
+
     const deleteItemClicked = async () => {
       try {
           await deleteItem({id: cartItem.id}).unwrap()
@@ -40,26 +35,16 @@ const CartItem = ({cartItemId}) => {
     }
   }
   const shop = useSelector((state) => selectShopById(state, Number(cartItem?.shop)))
-    // const { data:shops, isLoading, isSuccess, isError, error } = useGetShopsQuery('getShops')
-    // let shop;
-    // if (isLoading) {
-    //     shop = <p>...</p>;
-    //   } else if (isSuccess) {
-    //     shop = shops.entities[cartItem.shop].name;
-    //   }
-    
-    const itemTotal = (cartItem?.price * cartItem?.quantity).toFixed(2)
+  const itemTotal = (cartItem?.price * cartItem?.quantity).toFixed(2)
 
   return (
     <article className='cartItem'>
         <div>{cartItem?.name}</div>
         <div>{cartItem?.price}</div>
         <div className='qtyCart'><div className='qtyBtn' onClick={itemQtyChanged}>{'<'}</div><div>{cartItem?.quantity}</div><div className='qtyBtn' onClick={itemQtyChanged}>{'>'}</div></div>
-        <div>{shop?.name}</div>
+        <div>{shop?.title}</div>
         <div>{itemTotal}</div>
         <div onClick={deleteItemClicked}><button className='rmvBtn'>Remove</button></div>
-
-
     </article>
   )
 }

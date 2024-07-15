@@ -5,9 +5,7 @@ import { useSelector } from "react-redux"
 export const Coupon = (couponId) => {
 
     const [buttonText, setButtonText] = useState('Copy')
-
     const couponSelected = useSelector((state) => selectCouponById(state, Number(couponId.couponId)))
-
     const [copy, { isLoading:isLoadingCopy }] = useCopyCouponMutation()
 
     const copyCoupon = (e) => {
@@ -19,16 +17,13 @@ export const Coupon = (couponId) => {
                 console.error('Failed to copy the coupon', err)
             }
         }
-    console.log(buttonText);
-    // console.log(e.target.parentElement.value);
   }
 
   return (
     <li className='coupon'>
         <div>{couponSelected.name}</div>
         <div>{couponSelected.code}</div>
-         {/* <button onClick={copyCoupon}>{'Copy'}</button> */}
-        <button onClick={copyCoupon}>{couponSelected.copied ? 'Copied' : 'Copy'}</button>
+        <button onClick={copyCoupon}>{couponSelected.copied ? 'Remove' : 'Copy'}</button>
     </li>
   )
 }

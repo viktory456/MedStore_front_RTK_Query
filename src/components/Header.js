@@ -6,7 +6,6 @@ const NavUnlisted = styled.ul`
 
   display: flex;
   padding: 0;
-  // width: 300px;
   justify-content: left;
   align-items: center;
   column-gap: 35px;

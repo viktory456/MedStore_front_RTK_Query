@@ -21,9 +21,7 @@ export const FinalPage = () => {
   const [cart, setCart] = useState('');
   const [currier, setCurrier] = useState(false);
 
-  // const [addCustomer, { isLoading, isSuccess }] = useAddCustomerMutation()
   const [addOrder, { isLoading:isLoadingAddOrder, isSuccess:isSuccessAddOrder }] = useAddOrderMutation()
-
 
   // const onSubmitClicked = async () => {
   //   if(!isLoadingAddOrder) {

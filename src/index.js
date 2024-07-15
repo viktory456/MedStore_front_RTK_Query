@@ -6,9 +6,9 @@ import { store } from './app/store';
 import {Provider} from 'react-redux';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { shopsApiSlice } from './features/api/shopsSlice';
-import { drugsApiSlice } from './features/api/drugsSlice';
+import { medsApiSlice } from './features/api/medsSlice';
 import { cartApiSlice } from './features/api/cartSlice';
-import {drugsShopsApiSlice} from './features/api/drugsToShopsSlice';
+import {medsShopsApiSlice} from './features/api/medsToShopsSlice';
 import { ordersApiSlice } from './features/api/ordersSlice';
 import { couponsApiSlice } from './features/api/couponsSlice';
 // import { ApiProvider } from '@reduxjs/toolkit/query/react';
@@ -16,9 +16,9 @@ import { couponsApiSlice } from './features/api/couponsSlice';
 
 
 store.dispatch(shopsApiSlice.endpoints.getShops.initiate())
-store.dispatch(drugsApiSlice.endpoints.getDrugs.initiate())
+store.dispatch(medsApiSlice.endpoints.getMeds.initiate())
 store.dispatch(cartApiSlice.endpoints.getCart.initiate())
-store.dispatch(drugsShopsApiSlice.endpoints.getDrugsShops.initiate())
+store.dispatch(medsShopsApiSlice.endpoints.getMedsShops.initiate())
 store.dispatch(ordersApiSlice.endpoints.getOrders.initiate())
 store.dispatch(couponsApiSlice.endpoints.getCoupons.initiate())
 

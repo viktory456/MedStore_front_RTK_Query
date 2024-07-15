@@ -1,9 +1,7 @@
 import {createSelector, createEntityAdapter} from "@reduxjs/toolkit";
 import {apiSlice} from './api'
-import { quartersInYear } from "date-fns/constants";
 
 const cartAdapter = createEntityAdapter()
-
 const initialState = cartAdapter.getInitialState()
 
 export const cartApiSlice = apiSlice.injectEndpoints({
@@ -38,7 +36,7 @@ export const cartApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: (result, error, body) => [
                 { type: 'Cart', id: body.id }
-            ]//how to make rerender after qty change??
+            ]
         }),
         decreaseQty: builder.mutation({
             query: initialItem => ({
@@ -51,7 +49,7 @@ export const cartApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: (result, error, body) => [
                 { type: 'Cart', id: body.id }
-            ]//how to make rerender after qty change??
+            ]
         }),
         deleteFromCart: builder.mutation({
             query: ({ id }) => ({
@@ -84,19 +82,15 @@ export const {
     useAddCustomerMutation
 } = cartApiSlice
 
-// returns the query result object
 export const selectCartResult = cartApiSlice.endpoints.getCart.select()
 
-// Creates memoized selector
 const selectCartData = createSelector(
     selectCartResult,
-    cartResult => cartResult.data // normalized state object with ids & entities
+    cartResult => cartResult.data 
 )
 
-//getSelectors creates these selectors and we rename them with aliases using destructuring
 export const {
     selectAll: selectAllCart,
     selectById: selectCartById,
     selectIds: selectCartIds
-    // Pass in a selector that returns the posts slice of state
 } = cartAdapter.getSelectors(state => selectCartData(state) ?? initialState)

@@ -37,7 +37,7 @@ export const ShoppingCart = ({setCartTotal, setCart, name, email, phone, adress,
   localStorage.setItem('cart', JSON.stringify(cart));
 
   useEffect(() => {
-    setCartTotal(totalCart);
+    setCartTotal(totalCart.toFixed(2));
     const cartToSave = JSON.stringify(cart)
     setCart(cartToSave)
   }, [totalCart, cart])
@@ -45,7 +45,6 @@ export const ShoppingCart = ({setCartTotal, setCart, name, email, phone, adress,
   const onSubmitClicked = async () => {
     if(!isLoadingAddOrder) {
       try {
-        // await addCustomer({ name, email, phone, adress}).unwrap()
         await addOrder({ name, email, phone, adress, deliveryType, totalCost, order}).unwrap()
 
       } catch (err) {
@@ -73,8 +72,6 @@ export const ShoppingCart = ({setCartTotal, setCart, name, email, phone, adress,
         <div className='cartTotal'><div>{'Total:'}</div><div>{totalCartWithCoupons.toFixed(2)}</div></div>
         <button className="submitButton" onClick={onSubmitClicked} disabled={buttonStatus}>Confirm order</button>
       </div>
-
     </div>
-
   )
 }

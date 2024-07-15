@@ -1,10 +1,7 @@
 import {createSelector, createEntityAdapter} from "@reduxjs/toolkit"
 import {apiSlice} from './api'
 
-const ordersAdapter = createEntityAdapter({
-    sortComparer: (a, b) => a.id.localeCompare(b.id)
-})
-
+const ordersAdapter = createEntityAdapter({sortComparer: (a, b) => a.id.localeCompare(b.id)})
 const initialState = ordersAdapter.getInitialState()
 
 export const ordersApiSlice = apiSlice.injectEndpoints({
@@ -34,19 +31,15 @@ export const {
     useAddOrderMutation
 } = ordersApiSlice
 
-// returns the query result object
 export const selectOrdersResult = ordersApiSlice.endpoints.getOrders.select()
 
-// Creates memoized selector
 const selectOrdersData = createSelector(
     selectOrdersResult,
-    ordersResult => ordersResult.data // normalized state object with ids & entities
+    ordersResult => ordersResult.data 
 )
 
-//getSelectors creates these selectors and we rename them with aliases using destructuring
 export const {
     selectAll: selectAllOrders,
     selectById: selectOrderById,
     selectIds: selectOrderIds
-    // Pass in a selector that returns the posts slice of state
 } = ordersAdapter.getSelectors(state => selectOrdersData(state) ?? initialState)

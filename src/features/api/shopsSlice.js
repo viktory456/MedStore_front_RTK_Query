@@ -1,10 +1,7 @@
 import {createSelector, createEntityAdapter} from "@reduxjs/toolkit"
 import {apiSlice} from '../api/api'
-// import { useParams } from 'react-router-dom'
 
-const shopsAdapter = createEntityAdapter({
-    sortComparer: (a, b) => a.id.localeCompare(b.id)
-})
+const shopsAdapter = createEntityAdapter({sortComparer: (a, b) => a.id.localeCompare(b.id)})
 
 const initialState = shopsAdapter.getInitialState()
 
@@ -14,8 +11,6 @@ export const shopsApiSlice = apiSlice.injectEndpoints({
             query: () => '/',
 
             transformResponse: (responseData, meta, arg) => {
-                // const drugsToShop = responseData.drugsShops.filter(item => Number(item.shopId == Number(arg)))
-                // return drugsShopsAdapter.setAll(initialState, drugsToShop)
                 return shopsAdapter.setAll(initialState, responseData.shops)
             },
             providesTags: { type: 'Shop', id: "LIST" },
@@ -40,20 +35,16 @@ export const {
     // useDeleteSkillMutation
 } = shopsApiSlice
 
-// returns the query result object
 export const selectShopsResult = shopsApiSlice.endpoints.getShops.select()
 
-// Creates memoized selector
 const selectShopsData = createSelector(
     selectShopsResult,
-    shopsResult => shopsResult.data // normalized state object with ids & entities
+    shopsResult => shopsResult.data 
 )
 
-//getSelectors creates these selectors and we rename them with aliases using destructuring
 export const {
     selectAll: selectAllShops,
     selectById: selectShopById,
     selectIds: selectShopIds
-    // Pass in a selector that returns the posts slice of state
 } = shopsAdapter.getSelectors(state => selectShopsData(state) ?? initialState)
 
