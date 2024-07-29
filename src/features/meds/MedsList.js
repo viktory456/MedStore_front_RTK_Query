@@ -1,8 +1,18 @@
-import { useGetMedsShopsQuery, selectDtSById, selectAllDtS} from '../api/medsToShopsSlice'
-import { useGetMedsQuery, useGetMedsByPriceQuery, selectAllMeds, selectAllMedsByPrice} from '../api/medsSlice'
+import { selectAllDtS } from '../api/medsToShopsSlice'
+import { selectAllMeds } from '../api/medsSlice'
 import Med from "../meds/Med"
 import { useMemo, useState, useEffect } from'react'
 import { useSelector } from "react-redux"
+import {Stack, Grid, Button } from '@mui/material'
+import styled from "styled-components"
+
+
+const SortingButtons = styled(Button)(() => ({
+  border: '1px solid #846C98',
+  color:`#846C98`,
+'&:hover': {
+  backgroundColor: '#FFFFFF',
+}}));
 
 export const MedsList = ({shop}) => {
   const [sortedList, setSortedList] = useState(false)
@@ -59,13 +69,19 @@ export const MedsList = ({shop}) => {
   const resetSorting = () => {setSortedList(false)}
   const selectAllShops = () => {setSelectedShop('default')}
   useEffect(()=>{ setSelectedShop(shop) }, [shop])
+  const heightCalc = `${Number(window.innerHeight)}`-200
+
 
   return (
-    <>
-      <div className='medsMenu'>{medsList}</div>
-      <button className='buyButton' onClick={sortByPrice}>Sort by Price</button>
-      <button className='buyButton' onClick={resetSorting}>Reset Sorting</button>
-      <button className='buyButton' onClick={selectAllShops}>Select All Shops</button>
-    </>
+    <Stack direction='row' sx={{paddingTop:{xs:'250px', md:'0px'}}}>
+      <Grid container spacing={1} justifyContent={{xs:'space-between', md:'start'}} sx={{borderRadius:`10px`, paddingLeft:{xs:'0px', md:'200px'}, height:{xs:`${heightCalc}px`, md:`${window.innerHeight}px`}, overflowY: "auto"}}>{medsList}</Grid>
+
+      <Stack direction='column' alignItems={{xs:'center'}} justifyContent={{xs:'center'}} spacing={1} sx={{position:`fixed`, right:{xs:'40px', sm:'50px', lg:'150px'}}}>
+        <SortingButtons variant='outlined' sx={{fontSize:{xs:'8px', sm:'12px', md:'16px'}, padding:{xs:'3px', md:'15px'}}} onClick={sortByPrice}>Sort by Price</SortingButtons>
+        <SortingButtons variant='outlined' sx={{fontSize:{xs:'8px', sm:'12px', md:'16px'}, padding:{xs:'3px', md:'15px'}}} onClick={resetSorting}>Reset Sorting</SortingButtons>
+        <SortingButtons variant='outlined' sx={{fontSize:{xs:'8px', sm:'12px', md:'16px'}, padding:{xs:'3px', md:'15px'}}} onClick={selectAllShops}>All Shops</SortingButtons>
+      </Stack>
+
+    </Stack>
     )
 }

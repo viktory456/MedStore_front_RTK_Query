@@ -1,8 +1,9 @@
 import React from 'react'
-import { useParams, Link } from 'react-router-dom'
-import { useGetShopsQuery, selectShopById } from '../api/shopsSlice'
+import { useParams } from 'react-router-dom'
+import {  selectShopById } from '../api/shopsSlice'
 import MedsShops from '../meds/MedsShops'
 import { useSelector } from 'react-redux'
+import {Stack, Box} from '@mui/material'
 
 export const ShopPage = () => {
 
@@ -10,11 +11,11 @@ export const ShopPage = () => {
     const shop = useSelector((state) => selectShopById(state, Number(shopId)))
 
     return (
-    <div className='shopPage'>
-        <div className='shopTitle'>{shop.title}</div>
-        <div className='shopAdress'>{shop.adress}</div>
+    <Stack direction='column' spacing={3} color='#1F273D'>
+        <Box sx={{fontWeight:'bold'}}>{shop.title}</Box>
+        <Box>{shop.adress}</Box>
         <MedsShops shopId={shopId}/>
-    </div>
+    </Stack>
 
   )
 }

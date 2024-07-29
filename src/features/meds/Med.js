@@ -1,13 +1,24 @@
-import { useGetMedsQuery, selectMedById, selectAllMeds} from '../api/medsSlice'
+import { selectMedById, selectAllMeds, useAddFavoriteMutation} from '../api/medsSlice'
 import {useAddToCartMutation, selectAllCart} from '../api/cartSlice'
 import {Buffer} from "buffer" 
-import { useState, useEffect } from 'react'
-import { useGetShopsQuery, selectAllShops, selectShopById } from '../api/shopsSlice'
+import { useState } from 'react'
+import { selectAllShops, selectShopById } from '../api/shopsSlice'
 import { StarEmpty, StarSolid } from './Favorites'
-import {useAddFavoriteMutation} from '../api/medsSlice'
 import { useSelector } from 'react-redux'
+import styled from "styled-components"
+import {Stack, Grid, Typography, Box, Button} from '@mui/material'
+
+const QtyButtons = styled(Button)(() => ({
+        fontSize:'16px',
+        minWidth:`25px`, 
+        color:`#846C98`,
+    '&:hover': {
+        backgroundColor: '#FFFFFF',
+        fontWeight: 'bold',
+    }}));
 
 const Med = ({medId}) => {
+
     const [addFavorite, {isLoading:isLoadingAddFav}] = useAddFavoriteMutation()
     const meds = useSelector(selectAllMeds)
     const med = useSelector((state) => selectMedById(state, Number(medId.id)))
@@ -20,20 +31,16 @@ const Med = ({medId}) => {
     }
     const [quantity, setQuantity] = useState(startingQty)
     const qtyDecrease = () => {
-        if (quantity === 1) {
-            return;
-        }
+        if (quantity === 1) {return}
         setQuantity(quantity - 1)
     }
     const qtyIncrease = () => setQuantity(quantity + 1)
-
     const shops = useSelector(selectAllShops)
     const shop = useSelector((state) => selectShopById(state, Number(med?.shop_id)))
     const [favorite, setFavorite] = useState(med?.favorite)
     const base64 = Buffer.from(med?.img.data, "binary" ).toString("base64");
     const idInCart = `${med?.id}${new Date().getTime()}`
     const [addToCart, { isLoading }] = useAddToCartMutation()
-
     const onAddItemClicked = async () => {
         if (!isLoading) {
             try {
@@ -44,30 +51,34 @@ const Med = ({medId}) => {
         }
     }
     const toggleFav = () => {
+        setFavorite(!favorite)
         if(!isLoadingAddFav){
             addFavorite(Number(medId.id)).unwrap()
         }
     }
 
   return (
-    <article className='medItem'>
-        <div className='favIcon' onClick={toggleFav}>
-            {favorite ? <StarSolid /> : <StarEmpty />}
-        </div>
-        <img className='medPic' src={`data:image/png;base64,${base64}`}/>
-        <div className='picDescription'>
-            <h2>{med.name}</h2>
-            <p>{`${med.price} uah`}</p>
-            <h2>{shop?.title}</h2>
-            <div className='qtyCounter'>
-                <button className='qtyButton' onClick={qtyDecrease}>{'-'}</button>
-                <div>{quantity}</div>
-                <button className='qtyButton' onClick={qtyIncrease}>{'+'}</button>
-            </div>
-            <button className='buyButton' type="button" onClick={onAddItemClicked}>{'add to Cart'}</button>
-        </div>
-    </article>
+    <Grid item xs={8} lg={4} sx={{position:'relative', padding:{xs:'8px', md:'16px'}, border: `1px solid #1F273D`, borderRadius: `10px`, margin: `8px`}}>
+        <Stack direction="column" spacing={1}>
+            <Box sx={{position:'absolute', right:{xs:'5px', md:'16px'}, top:{xs:'5px', md:'16px'}}} onClick={toggleFav}>
+                {favorite ? <StarSolid /> : <StarEmpty />}
+            </Box>
+            <Grid container spacing={0} justifyContent="center" alignItems='center'> <Box component="img" sx={{height: 150, width: 130}} src={`data:image/png;base64,${base64}`}/></Grid>
+
+            <Stack direction='row' alignItems='center' justifyContent='space-evenly' sx={{color: `#1F273D`}}>
+                <Box sx={{width:`120px`, fontWeight:`bold`, display:'flex', justifyContent:'center'}}>{med.name}</Box>
+                <Box sx={{alignItems:"center", display:{xs:'none', sm:'block'}}}>{`${med.price}`}</Box>
+                <Box display={{xs:'none', sm:'none', md:'none', lg:'flex'}} alignItems='center' justifyContent='center' width={150} sx={{fontWeight: `bold`}}>{shop?.title}</Box>
+                <Stack direction='row' justifyContent='center' alignItems='center' sx={{display:{xs:'none', sm:'flex'}}}>
+                    <QtyButtons sx={{minWidth:`25px`, color:`#846C98`}} onClick={qtyDecrease}>{'-'}</QtyButtons>
+                    <Typography sx={{fontStyle:`bold`}}>{quantity}</Typography>
+                    <QtyButtons sx={{minWidth:`25px`, color:`#846C98`}} className='qtyButton' onClick={qtyIncrease}>{'+'}</QtyButtons>
+                </Stack>
+                <Button sx={{minWidth:{xs:'20px', md:'60px'}, height:{xs:'20px', md:'40px'}, border:'1px solid #1F273D', borderRadius:{xs:'5px', md:'10px'}, color:'#1F273D', padding:{xs:'3px', md:'6px 8px'}, fontSize:{xs:'10px', md:'16px'}}} type="button" onClick={onAddItemClicked}>{'Buy'}</Button>
+            </Stack>
+        </Stack>
+    </Grid>
   )
 }
 
-export default Med
+export default Med 

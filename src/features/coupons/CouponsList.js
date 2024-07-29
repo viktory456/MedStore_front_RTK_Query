@@ -1,7 +1,8 @@
 import React from 'react'
-import { selectAllCoupons, useGetCouponsQuery, selectCouponById } from '../api/couponsSlice'
+import { selectAllCoupons } from '../api/couponsSlice'
 import { useSelector } from "react-redux"
 import { Coupon } from './Coupon'
+import Grid from '@mui/material/Grid'
 
 export const CouponsList = () => {
   
@@ -9,9 +10,10 @@ export const CouponsList = () => {
   let couponsList = coupons.map(id => <Coupon key={id.id} couponId={id.id}/>)
 
   return (
-    <div className='coupons'>
-      <ul className='couponsList'>{couponsList}</ul>
-    </div>
+    <Grid container sx={{border:'1px solid #1F273D', borderRadius:'10px', justifyContent:'space-evenly'}}>
+      {couponsList}
+    </Grid>
 
   )
 }
+ 

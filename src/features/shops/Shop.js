@@ -1,68 +1,34 @@
-import { useGetShopsQuery, selectShopById} from '../api/shopsSlice'
-import { NavLink } from "react-router-dom"
-import { useGetMedsQuery} from '../api/medsSlice'
+import { selectShopById} from '../api/shopsSlice'
 import styled from "styled-components"
-import { createContext, useContext, useEffect } from "react"
+import { useContext } from "react"
 import { ShopChosen } from '../mainPage/MainPage'
 import { useSelector } from 'react-redux'
+import Button from '@mui/material/Button'
 
-const NavUnlisted = styled.ul`
 
-  // display: flex;
-  padding: 0;
-  // width: 300px;
-  // justify-content: center;
-  // align-items: center;
-  // column-gap: 35px;
-  margin:0;
-
-  a {
-    text-decoration: none;
-  }
-
-  li {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: darkslategrey;
-    font-size: 1.3rem;
-    list-style: none;
-    width: 90%;
-    height: 60px;
-    text-align: center;
-    line-height: 100%;
-    border: 1px solid darkslategrey;
-    border-radius: 10px;
-    margin: 20px auto;
-    background-color: white;
-  }
-  li:hover {
-    background-color: antiquewhite;
-    cursor: pointer;
-  }
-`;
+const ChooseShopButton = styled(Button)(() => ({
+  color: `#1F273D`,
+  border: '1px solid #1F273D',
+'&:hover': {
+  backgroundColor: `#846C98`,
+  color: `#FFFFFF`,
+  border: `1px solid #846C98`,
+}
+}));
 
 
 const Shop = ({shopId, setShop}) => {
 
+
+
 const useShop = useContext(ShopChosen)
 const shop = useSelector((state) => selectShopById(state, Number(shopId.id)))
-
 const onShopChanged = () => { setShop(shopId.id)}
 
   return (
-    <NavUnlisted>
-      <NavLink to={`/`}
-        style={({ isActive}) => {
-          return {
-            fontWeight: isActive ? "bold" : "normal",
-          };
-        }
-      }
-      onClick={onShopChanged}
-      ><li>{shop.title}</li></NavLink>
-    </NavUnlisted>
+      <ChooseShopButton variant="outlined" onClick={onShopChanged} sx={{fontSize:{xs:'10px', md:'16px'}}}>
+        {shop.title}
+      </ChooseShopButton>
   )
 }
 
